@@ -31,7 +31,15 @@ def create_app(config_name='default'):
     login_manager.init_app(app)
     login_manager.session_protection = 'strong'
 
-    CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=False)
+    CORS(app, resources={r"/api/*": {
+        "origins": [
+            "http://localhost:5173",
+            "http://127.0.0.1:5173",
+            "http://localhost:5000",
+            "http://127.0.0.1:5000",
+            "https://real-time-file-integrity-cybersecur.vercel.app"
+        ]
+    }}, supports_credentials=True)
     socketio.init_app(app, cors_allowed_origins='*',
                       async_mode='threading',
                       logger=False, engineio_logger=False)

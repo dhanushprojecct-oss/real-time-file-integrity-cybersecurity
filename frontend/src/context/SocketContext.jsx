@@ -30,9 +30,19 @@ export function SocketProvider({ children }) {
       return
     }
 
-    const socket = io('/', {
+    const getBackendUrl = () => {
+      if (import.meta.env.VITE_API_URL) {
+        return import.meta.env.VITE_API_URL
+      }
+      if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+        return '/'
+      }
+      return 'http://localhost:5000'
+    }
+
+    const socket = io(getBackendUrl(), {
       withCredentials: true,
-      transports: ['websocket', 'polling'],
+      transports: ['polling', 'websocket'],
     })
     socketRef.current = socket
 
