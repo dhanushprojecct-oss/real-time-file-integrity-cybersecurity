@@ -37,11 +37,14 @@ def create_app(config_name='default'):
             "http://127.0.0.1:5173",
             "http://localhost:5000",
             "http://127.0.0.1:5000",
-            "https://real-time-file-integrity-cybersecur.vercel.app"
+            "https://real-time-file-integrity-cybersecur.vercel.app",
+            "https://real-time-file-integrity-cybersecur-*.vercel.app",
         ]
     }}, supports_credentials=True)
+
+    async_mode = app.config.get('SOCKETIO_ASYNC_MODE', 'threading')
     socketio.init_app(app, cors_allowed_origins='*',
-                      async_mode='threading',
+                      async_mode=async_mode,
                       logger=False, engineio_logger=False)
 
     # Register blueprints

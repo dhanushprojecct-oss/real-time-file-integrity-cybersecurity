@@ -53,6 +53,8 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SESSION_COOKIE_SECURE = True
+    SOCKETIO_ASYNC_MODE = 'eventlet'
+
 
 config = {
     'development': DevelopmentConfig,
