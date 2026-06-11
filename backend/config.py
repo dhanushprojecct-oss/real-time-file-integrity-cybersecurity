@@ -26,7 +26,7 @@ class Config:
     # Session
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
     SESSION_COOKIE_HTTPONLY = True
-    SESSION_COOKIE_SAMESITE = 'Lax'
+    SESSION_COOKIE_SAMESITE = 'Lax'  # overridden to None in ProductionConfig
     
     # Security Settings
     MAX_LOGIN_ATTEMPTS = 5
@@ -36,7 +36,7 @@ class Config:
     REPORTS_FOLDER = os.path.join(BASE_DIR, 'reports')
     
     # SocketIO
-    SOCKETIO_ASYNC_MODE = 'eventlet'
+    SOCKETIO_ASYNC_MODE = 'threading'
 
     # ── Email / SMTP Alert Settings ────────────────────────────────────────────
     MAIL_SERVER   = os.environ.get('MAIL_SERVER',   'smtp.gmail.com')
@@ -53,6 +53,7 @@ class ProductionConfig(Config):
     DEBUG = False
     TESTING = False
     SESSION_COOKIE_SECURE = True
+    SESSION_COOKIE_SAMESITE = 'None'  # Required for cross-origin Vercel <-> Railway
     SOCKETIO_ASYNC_MODE = 'eventlet'
 
 

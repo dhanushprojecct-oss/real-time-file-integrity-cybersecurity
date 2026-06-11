@@ -31,16 +31,19 @@ def create_app(config_name='default'):
     login_manager.init_app(app)
     login_manager.session_protection = 'strong'
 
-    CORS(app, resources={r"/api/*": {
-        "origins": [
-            "http://localhost:5173",
-            "http://127.0.0.1:5173",
-            "http://localhost:5000",
-            "http://127.0.0.1:5000",
-            "https://real-time-file-integrity-cybersecur.vercel.app",
-            "https://real-time-file-integrity-cybersecur-*.vercel.app",
-        ]
-    }}, supports_credentials=True)
+    # Build allowed origins — extend via FRONTEND_URL env var on Railway
+    _extra = os.environ.get('FRONTEND_URL', '').strip()
+    _origins = [
+        r"http://localhost:\d+",
+        r"http://127\.0\.0\.1:\d+",
+        r"https://real-time-file-integrity-cybersecur.*\.vercel\.app",
+        r"https://real-time-file-integrity-cybersecurity.*\.vercel\.app",
+    ]
+    if _extra:
+        _origins.append(_extra)
+
+    CORS(app, resources={r"/api/*": {"origins": _origins}},
+         supports_credentials=True)
 
     async_mode = app.config.get('SOCKETIO_ASYNC_MODE', 'threading')
     socketio.init_app(app, cors_allowed_origins='*',
